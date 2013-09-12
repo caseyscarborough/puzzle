@@ -28,12 +28,17 @@ public class puzzle {
 
   public static void main(String[] args) {
     int[] puzzleInput = getConsoleInput();
-
     puzzle puzzle = new puzzle(puzzleInput);
 
     if (!puzzle.isSolvable()) {
       System.out.printf("Given puzzle:\n%s\nis NOT solvable!", puzzle.toString());
       System.exit(0);
+    }
+
+    if (puzzle.isSolved()) {
+      System.out.println("This puzzle is solved!");
+    } else {
+      System.out.println("This puzzle is not solved.");
     }
 
     System.out.println(puzzle.toString());
@@ -55,6 +60,13 @@ public class puzzle {
       if(p[i] == 0 && i % 2 == 1) inversions++;
     }
     return (inversions % 2 == 0);
+  }
+
+  public boolean isSolved() {
+    for (int i = 1; i < this.state.length-1; i++)
+      if(this.state[i-1] > this.state[i]) return false;
+
+    return true;
   }
 
   /**
@@ -128,3 +140,12 @@ public class puzzle {
     return s;
   }
 }
+//
+//class Solver {
+//
+//  private Solver() {};
+//
+//  public static int[] search(puzzle puzzle) {
+//
+//  }
+//}

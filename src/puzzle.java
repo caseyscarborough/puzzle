@@ -1,4 +1,6 @@
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * This class contains logic and properties that are related to
@@ -56,13 +58,23 @@ public class puzzle {
   }
 
   /**
-   * This method determins whether or not the data inputted by
+   * This method determines whether or not the data inputted by
    * the user is a valid puzzle format.
    * @param puzzleInput A string of the user's input.
    * @return True if it is valid, false if not.
    */
   public static boolean isValid(String puzzleInput) {
-    return (puzzleInput.length() == 17 && !puzzleInput.contains("9"));
+    if (puzzleInput.length() == 17 && !puzzleInput.contains("9")) {
+      // Check if duplicates exist in the input.
+      Set<Integer> lump = new HashSet<Integer>();
+      for(String s : puzzleInput.split(" ")) {
+        int i = Integer.parseInt(s);
+        if (lump.contains(i)) return false;
+        lump.add(i);
+      }
+      return true;
+    }
+    return false;
   }
 
   /**

@@ -15,10 +15,9 @@ public class puzzle {
 
     puzzle puzzle = new puzzle(puzzleInput);
 
-    if (isSolvable(puzzle.initialState)) {
-      System.out.println("Puzzle is solvable.");
-    } else {
-      System.out.println("Puzzle is NOT solvable!");
+    if (!isSolvable(puzzle.initialState)) {
+      System.out.printf("Given puzzle:\n%s\nis NOT solvable!", puzzle.toString());
+      System.exit(0);
     }
 
     System.out.println(puzzle.toString());
@@ -69,7 +68,7 @@ public class puzzle {
     int[] state = this.state;
     String s = "";
     for(int i = 0; i < state.length; i++) {
-      if(i % 3 == 0) s += "\n";
+      if(i % 3 == 0 && i != 0) s += "\n";
       s += String.format("%d ", state[i]);
     }
     return s;

@@ -143,17 +143,23 @@ public class puzzle {
     return s;
   }
 
-  public int getHeuristic() {
+  public int getBlankIndex() {
+    for(int i = 0; i < this.state.length; i++) {
+      if (this.state[i] == 0) this.blankIndex = i;
+    }
+    return this.blankIndex;
+  }
+
+  public static int getHeuristic(int[] array) {
     int heuristic = 0;
 
-    for(int i = 0; i < this.state.length; i++) {
-      int n = this.state[i];
-      if (n == 0) this.blankIndex = i;
-
+    for(int i = 0; i < array.length; i++) {
+      int n = array[i];
       if (!(n == i + 1) && !(n == 0 && i == 8))
         heuristic++;
     }
-   return heuristic;
+    System.out.println(heuristic);
+    return heuristic;
   }
 }
 
@@ -161,10 +167,54 @@ class Solver {
 
   private Solver() {};
 
-  public static void search(puzzle puzzle) {
-    int moves = 0;
-  }
+  static int moves = 0;
 
+  public static void search(puzzle p) {
+
+    int column = p.getBlankIndex() % 3;
+    int row = p.getBlankIndex() / 3;
+
+    System.out.printf("Row: %d\nColumn: %d\n\n", row, column);
+
+    int[] temp = p.state;
+
+    int heuristic = puzzle.getHeuristic(p.state) + moves;
+    int tempHeuristic = 99;
+
+    if (row != 0) {
+      tempHeuristic = puzzle.getHeuristic(Move.up(p.state, p.getBlankIndex()));
+      Move.down(p.state, p.getBlankIndex());
+      if (tempHeuristic == moves) { System.exit(0); }
+    }
+
+    if (row != 2) {
+      tempHeuristic = puzzle.getHeuristic(Move.down(p.state, p.getBlankIndex()));
+      Move.up(p.state, p.getBlankIndex());
+      if (tempHeuristic == moves) { System.exit(0); }
+    }
+
+    if (column != 0) {
+      tempHeuristic = puzzle.getHeuristic(Move.left(p.state, p.getBlankIndex()));
+      Move.right(p.state, p.getBlankIndex());
+      if (tempHeuristic == moves) { System.exit(0); }
+    }
+
+    if(column != 2) {
+      tempHeuristic = puzzle.getHeuristic(Move.right(p.state, p.getBlankIndex()));
+      Move.left(p.state, p.getBlankIndex());
+      if (tempHeuristic == moves) { System.exit(0); }
+    }
+
+    for(int i : temp)
+      System.out.printf("%d ", i);
+    puzzle tempPuzzle = new puzzle(temp);
+    System.out.println("\n\n" + tempPuzzle.toString());
+    Solver.moves++;
+    if (!tempPuzzle.isSolved()) {
+      search(tempPuzzle);
+    }
+
+  }
 }
 
 class Move {
@@ -185,9 +235,12 @@ class Move {
   }
 
   public static int[] swap(int[] array, int index1, int index2) {
+    System.out.printf("\nSwapping %d and %d\n", index1, index2);
     int temp = array[index1];
     array[index1] = array[index2];
     array[index2] = temp;
+    for(int i : array)
+      System.out.printf("%d ", i);
     return array;
   }
 }

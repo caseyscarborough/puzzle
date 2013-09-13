@@ -12,19 +12,19 @@ import java.util.Set;
 public class puzzle {
 
   /** This field holds the initial state of the puzzle. */
-  int[] initialState = new int[9];
+  State initialState;
 
   /** This field holds the current state of the puzzle. */
-  int[] state = new int[9];
+  State state;
 
-  int blankIndex;
+  static final int[] goalState = { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
 
   /**
    * Constructor for puzzle class.
    * @param puzzleInput Valid sliding puzzle in 2D array format.
    */
   public puzzle(int[] puzzleInput) {
-    this.initialState = puzzleInput;
+    this.initialState = new State(puzzleInput);
     this.state = this.initialState;
   }
 
@@ -44,7 +44,6 @@ public class puzzle {
     }
 
     System.out.println(puzzle.toString() + "\n");
-    Solver.search(puzzle);
   }
 
   /**
@@ -54,7 +53,7 @@ public class puzzle {
    */
   public boolean isSolvable() {
     int inversions = 0;
-    int[] p = this.state;
+    int[] p = this.state.array;
 
     for(int i = 0; i < p.length - 1; i++) {
       for(int j = i + 1; j < p.length; j++)
@@ -66,8 +65,9 @@ public class puzzle {
   }
 
   public boolean isSolved() {
-    for (int i = 1; i < this.state.length-1; i++)
-      if(this.state[i-1] > this.state[i]) return false;
+    int[] p = this.state.array;
+    for (int i = 1; i < p.length-1; i++)
+      if(p[i-1] > p[i]) return false;
 
     return true;
   }
@@ -134,20 +134,13 @@ public class puzzle {
    * @return The puzzle as a string.
    */
   public String toString() {
-    int[] state = this.state;
+    int[] state = this.state.array;
     String s = "";
     for(int i = 0; i < state.length; i++) {
       if(i % 3 == 0 && i != 0) s += "\n";
       s += String.format("%d ", state[i]);
     }
     return s;
-  }
-
-  public int getBlankIndex() {
-    for(int i = 0; i < this.state.length; i++) {
-      if (this.state[i] == 0) this.blankIndex = i;
-    }
-    return this.blankIndex;
   }
 
   public static int getHeuristic(int[] array) {
@@ -164,56 +157,23 @@ public class puzzle {
 }
 
 class Solver {
-
   private Solver() {};
+}
 
-  static int moves = 0;
+class State {
+  int[] array = new int[9];
+  int blankIndex;
 
-  public static void search(puzzle p) {
+  public State(int[] input) {
+    this.array = input;
+    this.blankIndex = getIndex(input, 0);
+  }
 
-    int column = p.getBlankIndex() % 3;
-    int row = p.getBlankIndex() / 3;
-
-    System.out.printf("Row: %d\nColumn: %d\n\n", row, column);
-
-    int[] temp = p.state;
-
-    int heuristic = puzzle.getHeuristic(p.state) + moves;
-    int tempHeuristic = 99;
-
-    if (row != 0) {
-      tempHeuristic = puzzle.getHeuristic(Move.up(p.state, p.getBlankIndex()));
-      Move.down(p.state, p.getBlankIndex());
-      if (tempHeuristic == moves) { System.exit(0); }
+  public static int getIndex(int[] array, int value) {
+    for (int i = 0; i < array.length; i++) {
+      if (array[i] == value) return i;
     }
-
-    if (row != 2) {
-      tempHeuristic = puzzle.getHeuristic(Move.down(p.state, p.getBlankIndex()));
-      Move.up(p.state, p.getBlankIndex());
-      if (tempHeuristic == moves) { System.exit(0); }
-    }
-
-    if (column != 0) {
-      tempHeuristic = puzzle.getHeuristic(Move.left(p.state, p.getBlankIndex()));
-      Move.right(p.state, p.getBlankIndex());
-      if (tempHeuristic == moves) { System.exit(0); }
-    }
-
-    if(column != 2) {
-      tempHeuristic = puzzle.getHeuristic(Move.right(p.state, p.getBlankIndex()));
-      Move.left(p.state, p.getBlankIndex());
-      if (tempHeuristic == moves) { System.exit(0); }
-    }
-
-    for(int i : temp)
-      System.out.printf("%d ", i);
-    puzzle tempPuzzle = new puzzle(temp);
-    System.out.println("\n\n" + tempPuzzle.toString());
-    Solver.moves++;
-    if (!tempPuzzle.isSolved()) {
-      search(tempPuzzle);
-    }
-
+    return -1;
   }
 }
 

@@ -17,6 +17,8 @@ public class puzzle {
   /** This field holds the current state of the puzzle. */
   int[] state = new int[9];
 
+  int blankIndex;
+
   /**
    * Constructor for puzzle class.
    * @param puzzleInput Valid sliding puzzle in 2D array format.
@@ -41,7 +43,8 @@ public class puzzle {
       System.out.println("This puzzle is not solved.");
     }
 
-    System.out.println(puzzle.toString());
+    System.out.println(puzzle.toString() + "\n");
+    Solver.search(puzzle);
   }
 
   /**
@@ -139,13 +142,52 @@ public class puzzle {
     }
     return s;
   }
+
+  public int getHeuristic() {
+    int heuristic = 0;
+
+    for(int i = 0; i < this.state.length; i++) {
+      int n = this.state[i];
+      if (n == 0) this.blankIndex = i;
+
+      if (!(n == i + 1) && !(n == 0 && i == 8))
+        heuristic++;
+    }
+   return heuristic;
+  }
 }
-//
-//class Solver {
-//
-//  private Solver() {};
-//
-//  public static int[] search(puzzle puzzle) {
-//
-//  }
-//}
+
+class Solver {
+
+  private Solver() {};
+
+  public static void search(puzzle puzzle) {
+    int moves = 0;
+  }
+
+}
+
+class Move {
+  public static int[] up(int[] array, int index) {
+    return swap(array, index, index - 3);
+  }
+
+  public static int[] left(int[] array, int index) {
+    return swap(array, index, index - 1);
+  }
+
+  public static int[] right(int[] array, int index) {
+    return swap(array, index, index + 1);
+  }
+
+  public static int[] down(int[] array, int index) {
+    return swap(array, index, index + 3);
+  }
+
+  public static int[] swap(int[] array, int index1, int index2) {
+    int temp = array[index1];
+    array[index1] = array[index2];
+    array[index2] = temp;
+    return array;
+  }
+}

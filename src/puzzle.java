@@ -7,17 +7,20 @@ import java.util.Set;
  * a sliding puzzle.
  *
  * @author Casey Scarborough
- * @version 0.0.2 September 12, 2013
  */
 public class puzzle {
 
-  /** This field holds the initial state of the puzzle. */
+  /** The initial state of the puzzle. */
   State initialState;
 
-  /** This field holds the current state of the puzzle. */
+  /** The current state of the puzzle. */
   State state;
 
+  /** The goal state that we are trying to achieve. */
   static final int[] goalState = { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
+
+  /** The initial capacity of the board. */
+  static final int CAPACITY = 9;
 
   /**
    * Constructor for puzzle class.
@@ -64,6 +67,10 @@ public class puzzle {
     return (inversions % 2 == 0);
   }
 
+  /**
+   * This method checks to see if the puzzle has been solved.
+   * @return True if it is in the solved state, false if it is not.
+   */
   public boolean isSolved() {
     int[] p = this.state.array;
     for (int i = 1; i < p.length-1; i++)
@@ -93,7 +100,7 @@ public class puzzle {
   }
 
   /**
-   * This function retrieves a user's input from the console
+   * This method retrieves a user's input from the console
    * and returns the input as an integer array.
    * @return An array of integers.
    */
@@ -143,32 +150,82 @@ public class puzzle {
     return s;
   }
 
+  /**
+   * This method calculates the current heuristic for a puzzle's
+   * state. The heuristic it uses is the sum of the Manhattan Distance
+   * of each tile from where it is located to where is should be.
+   * @param array A puzzle state array.
+   * @return int - The heuristic for the current puzzle.
+   */
   public static int getHeuristic(int[] array) {
     int heuristic = 0;
 
     for(int i = 0; i < array.length; i++) {
-      int n = array[i];
-      if (!(n == i + 1) && !(n == 0 && i == 8))
-        heuristic++;
+      if (array[i] != 0)
+        heuristic += getManhattanDistance(i, array[i]);
     }
     System.out.println(heuristic);
     return heuristic;
   }
+
+  /**
+   * This method calculates the Manhattan Distance between a tile's
+   * location and it's goal location.
+   * @param index The tile's current index.
+   * @param number The value of the tile.
+   * @return int - The distance between the tile and it's goal state.
+   */
+  public static int getManhattanDistance(int index, int number) {
+    number--;
+    int distance = Math.abs((index / 3) - (number / 3)) + Math.abs((index % 3) - (number % 3));
+    return distance;
+  }
 }
 
-class Solver {
-  private Solver() {};
-}
-
+/**
+ * The state class is responsible for holding the current
+ * state of the puzzle, the previous state of the puzzle, as
+ * well as other information about the current state, such as the
+ * index of the blank space as well as g(n) and h(n).
+ * @author Casey Scarborough
+ */
 class State {
-  int[] array = new int[9];
-  int blankIndex;
 
+  /** The array representing the puzzle's state. */
+  public int[] array = new int[9];
+
+  /** The index location of the blank tile in the current state. */
+  public int blankIndex;
+
+  /** The number of moves since the start. */
+  public int g;
+
+  /** The number of moves to the goal. */
+  public int h;
+
+  /** The previous state. */
+  public State previous;
+
+  /**
+   * Initial constructor for the State class.
+   * @param input An array representing a puzzle.
+   */
   public State(int[] input) {
     this.array = input;
     this.blankIndex = getIndex(input, 0);
+    this.previous = null;
+    this.g = 0;
+    this.h = puzzle.getHeuristic(this.array);
   }
 
+  /**
+   * This method gets the index of a particular value in array.
+   * It is primarily used to retrieve the index of the blank tile
+   * in the constructor of the State class.
+   * @param array A puzzle state array.
+   * @param value The value in the array to retrieve the index for.
+   * @return int - The index of the tile being searched for.
+   */
   public static int getIndex(int[] array, int value) {
     for (int i = 0; i < array.length; i++) {
       if (array[i] == value) return i;
@@ -177,6 +234,7 @@ class State {
   }
 }
 
+/*
 class Move {
   public static int[] up(int[] array, int index) {
     return swap(array, index, index - 3);
@@ -204,3 +262,4 @@ class Move {
     return array;
   }
 }
+*/

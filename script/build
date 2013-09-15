@@ -1,0 +1,10 @@
+#!/bin/bash
+
+MVN=$(which mvn)
+if [ $? -eq 1 ]; then
+  echo "Cannot find Maven on your system."
+  echo "See https://maven.apache.org/ for installation instructions."
+  exit
+fi
+mvn clean
+mvn package -P cli-dist

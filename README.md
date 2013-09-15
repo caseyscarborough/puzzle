@@ -30,8 +30,7 @@ This is a Java project using Maven. The two dependencies you'll need are:
 Being by cloning the repository, or downloading the repository as a zip file.
 
 ```bash
-$ git clone https://github.com/caseyscarborough/puzzle.git
-$ cd puzzle
+$ git clone https://github.com/caseyscarborough/puzzle.git && cd puzzle
 ```
 
 Then package the project using Maven by executing the following command:
@@ -43,7 +42,7 @@ $ mvn package -P cli-dist
 You can then execute the application like this:
 
 ```bash
-$ java -cp target/Puzzle.jar Puzzle
+$ java -cp target/Puzzle.jar com.caseyscarborough.puzzle.Puzzle
 ```
 
 The application will then _block_ and allow you to input a sliding puzzle in the following format:

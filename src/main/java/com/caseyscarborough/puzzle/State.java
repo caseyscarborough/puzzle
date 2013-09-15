@@ -64,19 +64,9 @@ class State {
    * @return int - The index of the tile being searched for.
    */
   public static int getIndex(int[] array, int value) {
-    for (int i = 0; i < array.length; i++) {
+    for (int i = 0; i < array.length; i++)
       if (array[i] == value) return i;
-    }
     return -1;
-  }
-
-  /**
-   * The f(n) of the current state. This is calculated by
-   * retrieving the g + h of the state.
-   * @return int - The f(n) of the current state.
-   */
-  public int f() {
-    return g() + h();
   }
 
   /**
@@ -101,10 +91,7 @@ class State {
     String s = "\n\n";
     for(int i = 0; i < state.length; i++) {
       if(i % 3 == 0 && i != 0) s += "\n";
-      if (state[i] != 0)
-        s += String.format("%d ", state[i]);
-      else
-        s += "  ";
+      s += (state[i] != 0) ? String.format("%d ", state[i]) : "  ";
     }
     return s;
   }
@@ -136,14 +123,37 @@ class State {
     return sb.toString();
   }
 
+  /**
+   * This method returns the g(n) part of the cost function. It is the
+   * amount of steps that the current state is at.
+   * @return int - The g(n) of the current state.
+   */
   public int g() {
     return this.g;
   }
 
+  /**
+   * This method returns the h(n) part of the cost function. It is the
+   * heuristic (steps to the goal state) for the current state.
+   * @return int - The h(n) of the current state.
+   */
   public int h() {
     return this.h;
   }
 
+  /**
+   * The f(n) or total cost of the current state. This is calculated by
+   * retrieving the g + h of the state.
+   * @return int - The f(n) of the current state.
+   */
+  public int f() {
+    return g() + h();
+  }
+
+  /**
+   * Getter for the previous field.
+   * @return State - The previous state.
+   */
   public State getPrevious() {
     return this.previous;
   }

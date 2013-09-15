@@ -16,7 +16,7 @@ if [ ! -f ${JAR} ]; then
     exit
   fi
   echo "Packaging ${JAR}..."
-  exec mvn package -P cli-dist
+  mvn package -P cli-dist
 fi
 
-exec ${JAVA} -cp ${JAR} com.caseyscarborough.puzzle.Puzzle $@
+${JAVA} -cp ${JAR} com.caseyscarborough.puzzle.Puzzle $@

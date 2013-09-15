@@ -5,9 +5,9 @@ This application is a small command line utility used to solve the 8-puzzle game
 Initial State:
 
 <table>
-<tr><td>1</td><td>5</td><td>2</td></tr>
-<tr><td>4</td><td> </td><td>3</td></tr>
-<tr><td>7</td><td>8</td><td>6</td></tr>
+<tr><td>7</td><td>2</td><td>3</td></tr>
+<tr><td>4</td><td>6</td><td>5</td></tr>
+<tr><td>1</td><td> </td><td>8</td></tr>
 </table>
 
 Goal State:
@@ -33,7 +33,7 @@ Being by cloning the repository, or downloading the repository as a zip file.
 $ git clone https://github.com/caseyscarborough/puzzle.git && cd puzzle
 ```
 
-Then package the project using Maven by executing the following command:
+Once you've retrieved the repository and are in the project's directory, package the project using Maven by executing the following command:
 
 ```bash
 $ mvn package -P cli-dist
@@ -43,6 +43,14 @@ You can then execute the application like this:
 
 ```bash
 $ java -cp target/Puzzle.jar com.caseyscarborough.puzzle.Puzzle
+```
+
+OR if you are on a UNIX-based system, just clone the repository and run the `puzzle.sh` script to package the application using Maven and run the correct Java command.
+
+```bash
+$ git clone https://github.com/caseyscarborough/puzzle.git && cd puzzle
+$ chmod u+x puzzle.sh
+$ ./puzzle.sh
 ```
 
 The application will then _block_ and allow you to input a sliding puzzle in the following format:

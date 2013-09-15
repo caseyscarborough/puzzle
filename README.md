@@ -2,7 +2,7 @@
 
 This application is a small command line utility used to solve the 8-puzzle game. This implementation uses the [A * Search algorithm](http://en.wikipedia.org/wiki/A*_search_algorithm) to find the goal state. The [Manhattan distance](http://en.wikipedia.org/wiki/Taxicab_geometry) is used to calculate the [heuristic](http://en.wikipedia.org/wiki/Heuristic_function) of the puzzle at each state. An example of an initial state and goal state of the 8-puzzle game are shown below.
 
-Initial State:
+__Initial State__:
 
 <table>
 <tr><td>7</td><td>2</td><td>3</td></tr>
@@ -10,7 +10,7 @@ Initial State:
 <tr><td>1</td><td> </td><td>8</td></tr>
 </table>
 
-Goal State:
+__Goal State__:
 
 <table>
 <tr><td>1</td><td>2</td><td>3</td></tr>
@@ -33,25 +33,21 @@ Being by cloning the repository, or downloading the repository as a zip file.
 $ git clone https://github.com/caseyscarborough/puzzle.git && cd puzzle
 ```
 
-Once you've retrieved the repository and are in the project's directory, package the project using Maven by executing the following command:
+Once you've retrieved the repository and are in the project's directory, you can package the project using Maven and run it manually using the following commands:
 
 ```bash
 $ mvn package -P cli-dist
-```
-
-You can then execute the application like this:
-
-```bash
 $ java -cp target/Puzzle.jar com.caseyscarborough.puzzle.Puzzle
 ```
 
-OR if you are on a UNIX-based system, just clone the repository and run the `puzzle.sh` script to package the application using Maven and run the correct Java command.
+If you are on a UNIX-based system, run `script/build` to package the application using Maven and `script/puzzle` to run the application:
 
 ```bash
-$ git clone https://github.com/caseyscarborough/puzzle.git && cd puzzle
-$ chmod u+x puzzle.sh
-$ ./puzzle.sh
+$ script/build
+$ script/puzzle
 ```
+
+> _Note: This may require you to chmod the scripts make them executable:_ `chmod u+x script/*`
 
 The application will then _block_ and allow you to input a sliding puzzle in the following format:
 
@@ -82,7 +78,17 @@ Windows:
 Mac OS X/Linux:
 
 ```bash
-$ ./puzzle in.txt out.txt
+$ script/puzzle in.txt out.txt
+```
+
+### Input File Format
+
+The format of the input file should match the same as the input you'd give on the console. This means three lines, with three numbers, each separated by a space. See below:
+
+```bash
+4 1 2
+5 3 6
+0 7 8
 ```
 
 ## Sample Puzzles to Test

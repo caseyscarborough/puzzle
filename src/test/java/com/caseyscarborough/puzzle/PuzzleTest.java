@@ -1,3 +1,6 @@
+package com.caseyscarborough.puzzle;
+
+import com.caseyscarborough.puzzle.*;
 import org.junit.*;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
@@ -58,7 +61,7 @@ public class PuzzleTest {
 //  @Test
 //  public void testDifficultSolve() {
 //    int[] difficultPuzzle = { 7, 2, 3, 4, 6, 5, 1, 8, 0 };
-//    Puzzle puzzle = new Puzzle(difficultPuzzle);
+//    com.caseyscarborough.puzzle.Puzzle puzzle = new com.caseyscarborough.puzzle.Puzzle(difficultPuzzle);
 //    puzzle.solve();
 //    assertEquals("\n\n1 2 3 \n4 5 6 \n7 8   ", puzzle.state.toString());
 //  }

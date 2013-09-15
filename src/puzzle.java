@@ -1,6 +1,4 @@
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class contains logic and properties that are related to
@@ -11,16 +9,24 @@ import java.util.Set;
 public class puzzle {
 
   /** The initial state of the puzzle. */
-  State initialState;
+  public State initialState;
 
   /** The current state of the puzzle. */
-  State state;
-
-  /** The goal state that we are trying to achieve. */
-  static final int[] goalState = { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
+  public State state;
 
   /** The initial capacity of the board. */
   static final int CAPACITY = 9;
+
+  /** The A * Search priority queue used to solve the puzzle. */
+  public final PriorityQueue<State> queue = new PriorityQueue<State>(CAPACITY, new Comparator<State>() {
+    @Override
+    public int compare(State o1, State o2) {
+      return o1.f() - o2.f();
+    }
+  });
+
+  /** A Hash set containing the states that have been visited. */
+  public final HashSet<State> visited = new HashSet<State>();
 
   /**
    * Constructor for puzzle class.
@@ -29,24 +35,6 @@ public class puzzle {
   public puzzle(int[] puzzleInput) {
     this.initialState = new State(puzzleInput);
     this.state = this.initialState;
-  }
-
-  public static void main(String[] args) {
-    int[] puzzleInput = getConsoleInput();
-    puzzle puzzle = new puzzle(puzzleInput);
-
-    if (!puzzle.isSolvable()) {
-      System.out.printf("Given puzzle:\n%s\nis NOT solvable!", puzzle.toString());
-      System.exit(0);
-    }
-
-    if (puzzle.isSolved()) {
-      System.out.println("This puzzle is solved!");
-    } else {
-      System.out.println("This puzzle is not solved.");
-    }
-
-    System.out.println(puzzle.toString() + "\n");
   }
 
   /**
@@ -65,18 +53,6 @@ public class puzzle {
       if(p[i] == 0 && i % 2 == 1) inversions++;
     }
     return (inversions % 2 == 0);
-  }
-
-  /**
-   * This method checks to see if the puzzle has been solved.
-   * @return True if it is in the solved state, false if it is not.
-   */
-  public boolean isSolved() {
-    int[] p = this.state.array;
-    for (int i = 1; i < p.length-1; i++)
-      if(p[i-1] > p[i]) return false;
-
-    return true;
   }
 
   /**
@@ -164,7 +140,6 @@ public class puzzle {
       if (array[i] != 0)
         heuristic += getManhattanDistance(i, array[i]);
     }
-    System.out.println(heuristic);
     return heuristic;
   }
 
@@ -179,6 +154,41 @@ public class puzzle {
     number--;
     int distance = Math.abs((index / 3) - (number / 3)) + Math.abs((index % 3) - (number % 3));
     return distance;
+  }
+
+  /**
+   * This method handles adding the next state to the queue. It
+   * will only add the next state to the queue if it is a valid move
+   * and the state has not been visited previously.
+   * @param nextState
+   */
+  public void addToQueue(State nextState) {
+    if(nextState != null && !this.visited.contains(nextState)) this.queue.add(nextState);
+  }
+
+  /**
+   * This method handles the solving of a the puzzle.
+   * @param initial The initial state of the puzzle.
+   */
+  public void solve(int[] initial) {
+    queue.clear();
+    queue.add(this.initialState);
+
+    while(!queue.isEmpty()) {
+
+    }
+  }
+
+  public static void main(String[] args) {
+    int[] puzzleInput = getConsoleInput();
+    puzzle puzzle = new puzzle(puzzleInput);
+
+    if (!puzzle.isSolvable()) {
+      System.out.printf("Given puzzle:\n%s\nis NOT solvable!", puzzle.toString());
+      System.exit(0);
+    }
+
+    System.out.println(puzzle.toString() + "\n");
   }
 }
 
@@ -219,6 +229,22 @@ class State {
   }
 
   /**
+   * This constructor is used to create a new state based on
+   * the previous state and a new blank index.
+   * @param previous The previous state.
+   * @param blankIndex The new blank index.
+   */
+  public State(State previous, int blankIndex) {
+    this.array = Arrays.copyOf(previous.array, previous.array.length);
+    this.array[previous.blankIndex] = this.array[blankIndex];
+    this.array[blankIndex] = 0;
+    this.blankIndex = blankIndex;
+    this.g = previous.g + 1;
+    this.h = puzzle.getHeuristic(this.array);
+    this.previous = previous;
+  }
+
+  /**
    * This method gets the index of a particular value in array.
    * It is primarily used to retrieve the index of the blank tile
    * in the constructor of the State class.
@@ -232,34 +258,52 @@ class State {
     }
     return -1;
   }
+
+  /**
+   * The f(n) of the current state. This is calculated by
+   * retrieving the g + h of the state.
+   * @return int - The f(n) of the current state.
+   */
+  public int f() {
+    return g + h;
+  }
+
+  /**
+   * This method checks to see if the current state is the solved state.
+   * @return True if it is in the solved state, false if it is not.
+   */
+  public boolean isSolved() {
+    int[] p = this.array;
+    for (int i = 1; i < p.length-1; i++)
+      if(p[i-1] > p[i]) return false;
+
+    return true;
+  }
+
 }
 
-/*
 class Move {
-  public static int[] up(int[] array, int index) {
-    return swap(array, index, index - 3);
+  public static State up(State state) {
+    if (state.blankIndex > 2)
+      return new State(state, state.blankIndex - 3);
+    return null;
   }
 
-  public static int[] left(int[] array, int index) {
-    return swap(array, index, index - 1);
+  public static State down(State state) {
+    if (state.blankIndex < 6)
+      return new State(state, state.blankIndex + 3);
+    return null;
   }
 
-  public static int[] right(int[] array, int index) {
-    return swap(array, index, index + 1);
+  public static State left(State state) {
+    if (state.blankIndex % 3 > 0)
+      return new State(state, state.blankIndex - 1);
+    return null;
   }
 
-  public static int[] down(int[] array, int index) {
-    return swap(array, index, index + 3);
-  }
-
-  public static int[] swap(int[] array, int index1, int index2) {
-    System.out.printf("\nSwapping %d and %d\n", index1, index2);
-    int temp = array[index1];
-    array[index1] = array[index2];
-    array[index2] = temp;
-    for(int i : array)
-      System.out.printf("%d ", i);
-    return array;
+  public static State right(State state) {
+    if (state.blankIndex % 3 < 2)
+      return new State(state, state.blankIndex + 1);
+    return null;
   }
 }
-*/

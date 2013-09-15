@@ -1,6 +1,6 @@
 # Java Sliding Puzzle Solver
 
-This application is a small command line utility used to solve the 8-puzzle game. Examples are shown below:
+This application is a small command line utility used to solve the 8-puzzle game. This implementation uses the [A * Search algorithm](http://en.wikipedia.org/wiki/A*_search_algorithm) to find the goal state. The [Manhattan distance](http://en.wikipedia.org/wiki/Taxicab_geometry) is used to calculate the [heuristic](http://en.wikipedia.org/wiki/Heuristic_function) of the puzzle at each state. An example of an initial state and goal state of the 8-puzzle game are shown below.
 
 Initial State:
 
@@ -72,6 +72,14 @@ Zeros or blank spaces can be used for the input of the application, meaning all 
 ### Optional Parameters
 
 You have the option to give two optional parameters. The first is a filename to read from, and the second is a filename to write the output solution to.
+
+Windows:
+
+```
+> java -cp target\Puzzle.jar com.caseyscarborough.puzzle.Puzzle in.txt out.txt
+```
+
+Mac OS X/Linux:
 
 ```bash
 $ ./puzzle in.txt out.txt

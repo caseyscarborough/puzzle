@@ -1,8 +1,6 @@
 # Java Sliding Puzzle Solver
 
-### Objective
-
-Write a program in Java programming language to solve the 8-puzzle problem. You will use a general artificial intelligence methodology known as the _A* search algorithm_ to solve the puzzle. The 8-puzzle is a sliding puzzle that consists of a frame of 3x3 numbered square tiles in random order with one tile missing. The goal of the puzzle is to place the tiles in order by making sliding moves that use the empty space. There are 9 tiles (including the missing one), so the total state space for 8-puzzle is 9! (=362,880) and any one of these states can be the initial state whereas there is only one goal state. An example initial state and the goal state are given below:
+This application is a small command line utility used to solve the 8-puzzle game. Examples are shown below:
 
 Initial State:
 
@@ -20,70 +18,82 @@ Goal State:
 <tr><td>7</td><td>8</td><td> </td></tr>
 </table>
 
-### Requirements
+## Dependencies
 
-1. Must be a console application that runs from the terminal.
-2. Must be a single file called `puzzle.java` that contains all methods to deal with input, output, finding solvability, computing heuristics, etc.
-3. Input to your program will be the initial state of an eight puzzle given as a matrix. Allow both space and 0 to be used for the missing tile of the puzzle. Here is an example of the input (note: the input will be given in three lines with each input line containing three digits and the user hits Enter key after each line.
+This is a Java project using Maven. The two dependencies you'll need are:
 
-  ```bash
-  $ java puzzle
-  1 3 0
-  4 2 5
-  7 8 6
-  ```
+* [Java JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+* [Maven](http://maven.apache.org)
 
-4. Allow input from a .txt file or the console.
-5. Read from a file if a filename parameter is given, otherwise read from the console.
-6. Read input like this:
-  * Allow the complete path to be entered.
-  * If full path is not given, assume it is in the current directory.
-  * If it isn't terminate with _"File does not exist!"_
+## Usage
 
-  ```bash
-  $ java puzzle info.txt
-  ```
+Being by cloning the repository, or downloading the repository as a zip file.
 
-7. Validate the puzzle input appropriately. If an invalid puzzle is entered, terminate with _"Invalid 8-puzzle entered!"_
-8. After the input, determine whether the puzzle is solvable by passing it into a method called `isSolvable` that returns true or false.
-  * If it is not solvable, output with the following message:
+```bash
+$ git clone https://github.com/caseyscarborough/puzzle.git
+$ cd puzzle
+```
 
-  ```bash
-  Given puzzle:
-      1 3
-      4 2 5
-      7 8 6
-  is NOT solvable!
-  ```
+Then package the project using Maven by executing the following command:
 
-9. If the puzzle is solvable, print each state that leads to the goal state, starting from the following. Use a space instead of a zero.
-  ```bash
-  “Here are the steps to the goal state:
+```bash
+$ mvn package -P cli-dist
+```
 
-    1 3
-    4 2 5
-    7 8 6
+You can then execute the application like this:
 
-    1   3
-    4 2 5
-    7 8 6
+```bash
+$ java -cp target/Puzzle.jar Puzzle
+```
 
-    1 2 3
-    4   5
-    7 8 6
+The application will then _block_ and allow you to input a sliding puzzle in the following format:
 
-    1 2 3
-    4 5
-    7 8 6
+```bash
+0 1 2
+4 5 3
+7 6 8
+```
 
-    1 2 3
-    4 5 6
-    7 8
+Zeros or blank spaces can be used for the input of the application, meaning all of these inputs are valid:
 
-  Given puzzle is SOLVED!”
-  ```
-10. Allow the output to be to the console or an output file.
-11. Catch exceptions when appropriate.
-12. The source file must have a program header containing author's name, date, and any build instruction.
-13. Must be sufficiently commented and use proper indentation.
-14. Project must also contain a README.txt file that should list and (in one sentence) describe each file plus provide the build instruction. Any plug-in installation that may be required for building the solution should also be mentioned.
+```bash
+1 5 2        4 1 2          4 3        0 1 2
+4 0 3        5 8          1 7 6        4 5 3
+7 6 8        7 3 6        8 2 5        7 6 8
+```
+
+### Optional Parameters
+
+You have the option to give two optional parameters. The first is a filename to read from, and the second is a filename to write the output solution to.
+
+```bash
+$ java -cp target/Puzzle.jar Puzzle inFile.txt outFile.txt
+```
+
+## Sample Puzzles to Test
+
+The following are some sample puzzles to test the application out with.
+
+```bash
+0 5 2
+1 8 3
+4 7 6
+
+4 1 2
+5 8 3
+7 0 6
+
+Note: This one takes a minute!
+7 2 3
+4 6 5
+1 8 0
+
+These are not solvable.
+1 2 3
+4 5 6
+8 7 0
+
+1 5 0
+3 2 8
+4 6 7
+```

@@ -98,9 +98,13 @@ public class puzzle {
   public static int[] getConsoleInput() {
     Scanner scanner = new Scanner(System.in);
 
-    String t = scanner.nextLine().trim();
-    String m = scanner.nextLine().trim();
-    String b = scanner.nextLine().trim();
+    String t = scanner.nextLine();
+    String m = scanner.nextLine();
+    String b = scanner.nextLine();
+
+    t = handleBlankSpaces(t);
+    m = handleBlankSpaces(m);
+    b = handleBlankSpaces(b);
 
     String puzzle = String.format("%s %s %s", t, m, b);
     return convertToArray(puzzle);
@@ -119,7 +123,7 @@ public class puzzle {
       String currentLine;
       br = new BufferedReader(new FileReader(filename));
       while ((currentLine = br.readLine()) != null)
-        input += currentLine.trim() + " ";
+        input += handleBlankSpaces(currentLine) + " ";
       br.close();
     } catch (FileNotFoundException e) {
       System.out.println("File does not exist!");
@@ -127,6 +131,15 @@ public class puzzle {
     } catch (IOException e) {}
 
     return convertToArray(input.trim());
+  }
+
+  public static String handleBlankSpaces(String row) {
+    // Convert blanks in last space.
+    if (row.length() == 3) row += " 0";
+    // Convert blanks in first or second space.
+    row = row.replace("\\s\\s\\s", " 0 ").replace("\\s\\s", " 0 ");
+    System.out.println(row);
+    return row.trim();
   }
 
   /**

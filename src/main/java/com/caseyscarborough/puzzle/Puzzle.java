@@ -98,6 +98,7 @@ public class Puzzle {
    * @return An array of integers.
    */
   public static int[] getConsoleInput() {
+    System.out.println("\nEnter a valid 8-puzzle below:");
     Scanner scanner = new Scanner(System.in);
 
     String t = scanner.nextLine();
@@ -279,7 +280,7 @@ public class Puzzle {
 
     // Check if the puzzle is solvable.
     if (!puzzle.isSolvable()) {
-      System.out.printf("Given puzzle:%s\n\nis NOT solvable!", puzzle.state.toString());
+      System.out.printf("Given puzzle:%s\n\nis NOT solvable!\n", puzzle.state.toString());
       System.exit(0);
     }
 

@@ -224,6 +224,7 @@ public class Puzzle {
     // Clear the queue and add the initial state.
     queue.clear();
     queue.add(this.initialState);
+    long startTime = System.currentTimeMillis();
 
     while(!queue.isEmpty()) {
       // Get the best next state.
@@ -239,6 +240,8 @@ public class Puzzle {
         } else { // Print to the console.
           System.out.println(state.solutionMessage());
         }
+        long endTime = System.currentTimeMillis();
+        System.out.printf("\nSolution took %dms.\n", endTime - startTime);
         return;
       }
 

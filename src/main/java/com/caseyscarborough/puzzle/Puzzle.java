@@ -17,8 +17,8 @@ public class Puzzle {
   /** The current state of the puzzle. */
   public State state;
 
-  /** The initial capacity of the board. */
-  static final int CAPACITY = 9;
+  /** The initial capacity of the queue. */
+  static final int CAPACITY = 100;
 
   /** The filename for the file to output to, if given. */
   private String outFile;
@@ -241,7 +241,7 @@ public class Puzzle {
           System.out.println(state.solutionMessage());
         }
         long endTime = System.currentTimeMillis();
-        System.out.printf("\nSolution took %dms.\n", endTime - startTime);
+        System.out.printf("\nSolution took %dms and %d steps.\n", endTime - startTime, state.g());
         return;
       }
 

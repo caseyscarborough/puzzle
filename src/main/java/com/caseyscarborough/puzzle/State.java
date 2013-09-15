@@ -134,4 +134,8 @@ class State {
     return sb.toString();
   }
 
+  public int g() {
+    return g;
+  }
+
 }

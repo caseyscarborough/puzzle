@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -21,6 +18,8 @@ public class puzzle {
   /** The initial capacity of the board. */
   static final int CAPACITY = 9;
 
+  private String outFile;
+
   /** The A * Search priority queue used to solve the puzzle. */
   public final PriorityQueue<State> queue = new PriorityQueue<State>(CAPACITY, new Comparator<State>() {
     @Override
@@ -39,6 +38,17 @@ public class puzzle {
   public puzzle(int[] puzzleInput) {
     this.initialState = new State(puzzleInput);
     this.state = this.initialState;
+  }
+
+  /**
+   * Constructor for puzzle class.
+   * @param puzzleInput Valid sliding puzzle in 2D array format.
+   * @param outFile A filename to output solution to.
+   */
+  public puzzle(int[] puzzleInput, String outFile) {
+    this.initialState = new State(puzzleInput);
+    this.state = this.initialState;
+    this.outFile = outFile;
   }
 
   /**
@@ -119,6 +129,19 @@ public class puzzle {
   }
 
   /**
+   * This method outputs a passed in string into a filename.
+   */
+  public void writeToFile(String content) throws IOException {
+    File f = new File(this.outFile);
+    if (!f.exists()) f.createNewFile();
+
+    FileWriter fw = new FileWriter(f.getAbsoluteFile());
+    BufferedWriter bw = new BufferedWriter(fw);
+    bw.write(content);
+    bw.close();
+  }
+
+  /**
    * This method converts a string of user's input into
    * an integer array to be used by the puzzle class.
    * @param s A string of 9 integers separated by spaces.
@@ -190,8 +213,15 @@ public class puzzle {
       // Get the best next state.
       State state = queue.poll();
 
+      // Check if the state is a solution.
       if (state.isSolved()) {
-        System.out.println(state.solutionMessage());
+        if(this.outFile != null) {
+          try { // Write to the file.
+            this.writeToFile(state.solutionMessage());
+          } catch (IOException e) {}
+        } else { // Print to the console.
+          System.out.println(state.solutionMessage());
+        }
         return;
       }
 
@@ -207,16 +237,22 @@ public class puzzle {
   }
 
   public static void main(String[] args) {
-    int[] input = null;
+    int[] input;
+    puzzle puzzle = null;
 
     // Retrieve input based on argument length.
     if (args.length == 0){
       input = getConsoleInput();
-    } else {
+      puzzle = new puzzle(input);
+    } else if (args.length >= 1) {
       input = getFileInput(args[0]);
+      if (args.length == 1) {
+        puzzle = new puzzle(input);
+      } else {
+        // Create puzzle with output file for solution.
+        puzzle = new puzzle(input, args[1]);
+      }
     }
-
-    puzzle puzzle = new puzzle(input);
 
     // Check if the puzzle is solvable.
     if (!puzzle.isSolvable()) {
@@ -359,7 +395,7 @@ class State {
    */
   public String solutionMessage() {
     StringBuilder sb = new StringBuilder();
-    sb.append("\nHere are the steps to the goal state:");
+    sb.append("Here are the steps to the goal state:");
     sb.append(this.allSteps());
     sb.append("\n\nGiven puzzle is SOLVED!");
     return sb.toString();

@@ -66,7 +66,6 @@ public class Puzzle {
     for(int i = 0; i < p.length - 1; i++) {
       for(int j = i + 1; j < p.length; j++)
         if(p[i] > p[j]) inversions++;
-
       if(p[i] == 0 && i % 2 == 1) inversions++;
     }
     return (inversions % 2 == 0);
@@ -79,12 +78,12 @@ public class Puzzle {
    * @return True if it is valid, false if not.
    */
   public static boolean isValid(String puzzleInput) {
-    if (puzzleInput.length() == 17 && !puzzleInput.contains("9")) {
+    if (puzzleInput.length() == 17) {
       // Check if duplicates exist in the input.
-      Set<Integer> lump = new HashSet<Integer>();
+      HashSet<Integer> lump = new HashSet<Integer>();
       for(String s : puzzleInput.split(" ")) {
         int i = Integer.parseInt(s);
-        if (lump.contains(i)) return false;
+        if (lump.contains(i) || i > 8) return false;
         lump.add(i);
       }
       return true;
@@ -101,16 +100,11 @@ public class Puzzle {
     System.out.println("\nEnter a valid 8-puzzle below:");
     Scanner scanner = new Scanner(System.in);
 
-    String t = scanner.nextLine();
-    String m = scanner.nextLine();
-    String b = scanner.nextLine();
+    String t = handleBlankSpaces(scanner.nextLine());
+    String m = handleBlankSpaces(scanner.nextLine());
+    String b = handleBlankSpaces(scanner.nextLine());
 
-    t = handleBlankSpaces(t);
-    m = handleBlankSpaces(m);
-    b = handleBlankSpaces(b);
-
-    String puzzle = String.format("%s %s %s", t, m, b);
-    return convertToArray(puzzle);
+    return convertToArray(String.format("%s %s %s", t, m, b));
   }
 
   /**
@@ -143,7 +137,6 @@ public class Puzzle {
    * @return String the row with blanks replaced with 0s.
    */
   public static String handleBlankSpaces(String row) {
-    // Strip spaces from the end of the string.
     row = row.replaceAll("\\s+$", "");
 
     if (row.length() == 3) row += " 0";
@@ -177,7 +170,6 @@ public class Puzzle {
     }
 
     int[] p = new int[9];
-    // Remove spaces from string.
     s = s.replace(" ", "");
     for(int i = 0; i < s.length(); i++)
       p[i] = Integer.parseInt(Character.toString(s.charAt(i)));
@@ -209,9 +201,7 @@ public class Puzzle {
    * @return int - The distance between the tile and it's goal state.
    */
   public static int getManhattanDistance(int index, int number) {
-    number--;
-    int distance = Math.abs((index / 3) - (number / 3)) + Math.abs((index % 3) - (number % 3));
-    return distance;
+    return Math.abs((index / 3) - ((number-1) / 3)) + Math.abs((index % 3) - ((number-1) % 3));
   }
 
   /**
@@ -266,16 +256,10 @@ public class Puzzle {
 
     // Retrieve input based on argument length.
     if (args.length == 0){
-      input = getConsoleInput();
-      puzzle = new Puzzle(input);
-    } else if (args.length >= 1) {
+      puzzle = new Puzzle(getConsoleInput());
+    } else {
       input = readFromFile(args[0]);
-      if (args.length == 1) {
-        puzzle = new Puzzle(input);
-      } else {
-        // Create puzzle with output file for solution.
-        puzzle = new Puzzle(input, args[1]);
-      }
+      puzzle = (args.length == 1) ? new Puzzle(input) : new Puzzle(input, args[1]);
     }
 
     // Check if the puzzle is solvable.

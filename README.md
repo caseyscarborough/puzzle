@@ -74,7 +74,7 @@ Zeros or blank spaces can be used for the input of the application, meaning all 
 You have the option to give two optional parameters. The first is a filename to read from, and the second is a filename to write the output solution to.
 
 ```bash
-$ java -cp target/Puzzle.jar Puzzle inFile.txt outFile.txt
+$ ./puzzle in.txt out.txt
 ```
 
 ## Sample Puzzles to Test

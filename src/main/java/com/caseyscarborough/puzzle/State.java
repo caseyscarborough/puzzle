@@ -85,10 +85,10 @@ class State {
    */
   public boolean isSolved() {
     int[] p = this.array;
-    for (int i = 1; i < p.length-1; i++)
+    for (int i = 1; i < p.length - 1; i++)
       if(p[i-1] > p[i]) return false;
 
-    return true;
+    return (p[0] == 1);
   }
 
   /**

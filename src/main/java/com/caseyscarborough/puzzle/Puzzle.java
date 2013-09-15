@@ -135,6 +135,12 @@ public class Puzzle {
     return convertToArray(input.trim());
   }
 
+  /**
+   * This method replaces blanks in the user's input
+   * with 0s for easier solving of the puzzle.
+   * @param row The row input by the user.
+   * @return String the row with blanks replaced with 0s.
+   */
   public static String handleBlankSpaces(String row) {
     // Strip spaces from the end of the string.
     row = row.replaceAll("\\s+$", "");
@@ -213,7 +219,7 @@ public class Puzzle {
    * and the state has not been visited previously.
    * @param nextState
    */
-  public void addToQueue(State nextState) {
+  private void addToQueue(State nextState) {
     if(nextState != null && !this.visited.contains(nextState)) this.queue.add(nextState);
   }
 
@@ -228,20 +234,17 @@ public class Puzzle {
 
     while(!queue.isEmpty()) {
       // Get the best next state.
-      State state = queue.poll();
+      this.state = queue.poll();
 
       // Check if the state is a solution.
-      if (state.isSolved()) {
-        this.state = state;
+      if (this.state.isSolved()) {
         if(this.outFile != null) {
           try { // Write to the file.
-            this.writeToFile(state.solutionMessage());
+            this.writeToFile(this.state.solutionMessage(startTime));
           } catch (IOException e) {}
         } else { // Print to the console.
-          System.out.println(state.solutionMessage());
+          System.out.println(this.state.solutionMessage(startTime));
         }
-        long endTime = System.currentTimeMillis();
-        System.out.printf("\nSolution took %dms and %d steps.\n", endTime - startTime, state.g());
         return;
       }
 

@@ -71,7 +71,7 @@ public class PuzzleTest {
     int[] validPuzzle = { 1, 0, 2, 4, 5, 3, 7, 8, 6 };
     Puzzle puzzle = new Puzzle(validPuzzle);
     puzzle.solve();
-    assertEquals("Here are the steps to the goal state:\n" +
+    assertTrue(puzzle.state.solutionMessage(System.currentTimeMillis()).contains("Here are the steps to the goal state:\n" +
         "\n" +
         "1   2 \n" +
         "4 5 3 \n" +
@@ -89,7 +89,7 @@ public class PuzzleTest {
         "4 5 6 \n" +
         "7 8   \n" +
         "\n" +
-        "Given puzzle is SOLVED!", puzzle.state.solutionMessage());
+        "Given puzzle is SOLVED!"));
   }
 
   @Test

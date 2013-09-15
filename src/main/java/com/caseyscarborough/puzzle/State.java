@@ -126,11 +126,13 @@ class State {
    * puzzle has been solved using a StringBuilder.
    * @return String - The solution message.
    */
-  public String solutionMessage() {
+  public String solutionMessage(long startTime) {
+    long solveTime = System.currentTimeMillis() - startTime;
     StringBuilder sb = new StringBuilder();
     sb.append("Here are the steps to the goal state:");
     sb.append(this.allSteps());
     sb.append("\n\nGiven puzzle is SOLVED!");
+    sb.append("\nSolution took " + solveTime + "ms and " + this.g + " steps.\n");
     return sb.toString();
   }
 

@@ -134,11 +134,11 @@ public class Puzzle {
   }
 
   public static String handleBlankSpaces(String row) {
-    // Convert blanks in last space.
+    // Strip spaces from the end of the string.
+    row = row.replaceAll("\\s+$", "");
+
     if (row.length() == 3) row += " 0";
-    // Convert blanks in first or second space.
-    row = row.replace("\\s\\s\\s", " 0 ").replace("\\s\\s", " 0 ");
-    System.out.println(row);
+    row = row.replace("   ", " 0 ").replace("  ", "0 ");
     return row.trim();
   }
 
@@ -229,6 +229,7 @@ public class Puzzle {
 
       // Check if the state is a solution.
       if (state.isSolved()) {
+        this.state = state;
         if(this.outFile != null) {
           try { // Write to the file.
             this.writeToFile(state.solutionMessage());
@@ -277,6 +278,7 @@ public class Puzzle {
     // Solve the puzzle.
     puzzle.solve();
   }
+
 }
 
 /**

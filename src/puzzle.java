@@ -112,21 +112,6 @@ public class puzzle {
   }
 
   /**
-   * This returns a human-readable string representation
-   * of the current state of the puzzle it is called on.
-   * @return The puzzle as a string.
-   */
-  public String toString() {
-    int[] state = this.state.array;
-    String s = "";
-    for(int i = 0; i < state.length; i++) {
-      if(i % 3 == 0 && i != 0) s += "\n";
-      s += String.format("%d ", state[i]);
-    }
-    return s;
-  }
-
-  /**
    * This method calculates the current heuristic for a puzzle's
    * state. The heuristic it uses is the sum of the Manhattan Distance
    * of each tile from where it is located to where is should be.
@@ -168,14 +153,25 @@ public class puzzle {
 
   /**
    * This method handles the solving of a the puzzle.
-   * @param initial The initial state of the puzzle.
    */
-  public void solve(int[] initial) {
+  public void solve() {
     queue.clear();
     queue.add(this.initialState);
 
     while(!queue.isEmpty()) {
+      State state = queue.poll();
 
+      if (state.isSolved()) {
+        state.printAll();
+        return;
+      }
+
+      visited.add(state);
+
+      this.addToQueue(Move.up(state));
+      this.addToQueue(Move.down(state));
+      this.addToQueue(Move.left(state));
+      this.addToQueue(Move.right(state));
     }
   }
 
@@ -188,7 +184,7 @@ public class puzzle {
       System.exit(0);
     }
 
-    System.out.println(puzzle.toString() + "\n");
+    puzzle.solve();
   }
 }
 
@@ -278,6 +274,26 @@ class State {
       if(p[i-1] > p[i]) return false;
 
     return true;
+  }
+
+  /**
+   * This returns a human-readable string representation
+   * of the current state of the puzzle it is called on.
+   * @return The puzzle as a string.
+   */
+  public String toString() {
+    int[] state = this.array;
+    String s = "\n";
+    for(int i = 0; i < state.length; i++) {
+      if(i % 3 == 0 && i != 0) s += "\n";
+      s += String.format("%d ", state[i]);
+    }
+    return s;
+  }
+
+  public void printAll() {
+    if (this.previous != null) previous.printAll();
+    System.out.println(this.toString());
   }
 
 }

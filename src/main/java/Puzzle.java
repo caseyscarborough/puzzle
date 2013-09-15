@@ -7,7 +7,7 @@ import java.util.*;
  *
  * @author Casey Scarborough
  */
-public class puzzle {
+public class Puzzle {
 
   /** The initial state of the puzzle. */
   public State initialState;
@@ -36,7 +36,7 @@ public class puzzle {
    * Constructor for puzzle class.
    * @param puzzleInput Valid sliding puzzle in 2D array format.
    */
-  public puzzle(int[] puzzleInput) {
+  public Puzzle(int[] puzzleInput) {
     this.initialState = new State(puzzleInput);
     this.state = this.initialState;
   }
@@ -46,7 +46,7 @@ public class puzzle {
    * @param puzzleInput Valid sliding puzzle in 2D array format.
    * @param outFile A filename to output solution to.
    */
-  public puzzle(int[] puzzleInput, String outFile) {
+  public Puzzle(int[] puzzleInput, String outFile) {
     this.initialState = new State(puzzleInput);
     this.state = this.initialState;
     this.outFile = outFile;
@@ -252,19 +252,19 @@ public class puzzle {
 
   public static void main(String[] args) {
     int[] input;
-    puzzle puzzle = null;
+    Puzzle puzzle = null;
 
     // Retrieve input based on argument length.
     if (args.length == 0){
       input = getConsoleInput();
-      puzzle = new puzzle(input);
+      puzzle = new Puzzle(input);
     } else if (args.length >= 1) {
       input = readFromFile(args[0]);
       if (args.length == 1) {
-        puzzle = new puzzle(input);
+        puzzle = new Puzzle(input);
       } else {
         // Create puzzle with output file for solution.
-        puzzle = new puzzle(input, args[1]);
+        puzzle = new Puzzle(input, args[1]);
       }
     }
 
@@ -313,7 +313,7 @@ class State {
     this.blankIndex = getIndex(input, 0);
     this.previous = null;
     this.g = 0;
-    this.h = puzzle.getHeuristic(this.array);
+    this.h = Puzzle.getHeuristic(this.array);
   }
 
   /**
@@ -328,7 +328,7 @@ class State {
     this.array[blankIndex] = 0;
     this.blankIndex = blankIndex;
     this.g = previous.g + 1;
-    this.h = puzzle.getHeuristic(this.array);
+    this.h = Puzzle.getHeuristic(this.array);
     this.previous = previous;
   }
 

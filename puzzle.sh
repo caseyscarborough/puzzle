@@ -19,4 +19,4 @@ if [ ! -f ${JAR} ]; then
   exec mvn package -P cli-dist
 fi
 
-exec ${JAVA} -cp ${JAR} com.caseyscarborough.puzzle.Puzzle
+exec ${JAVA} -cp ${JAR} com.caseyscarborough.puzzle.Puzzle $@

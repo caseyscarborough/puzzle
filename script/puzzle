@@ -2,21 +2,15 @@
 
 JAVA=$(which java)
 if [ $? -eq 1 ]; then
-  echo "Cannot find the java command in your PATH."
+  echo "Cannot find Java on your system."
+  echo "See http://www.oracle.com/technetwork/java/javase/downloads/ to download the latest JDK."
   exit
 fi
 
 JAR="target/Puzzle.jar"
 if [ ! -f ${JAR} ]; then
   echo "Cannot find ${JAR}."
-
-  MVN=$(which mvn)
-  if [ $? -eq 1 ]; then
-    echo "Cannot find Maven on your system."
-    exit
-  fi
-  echo "Packaging ${JAR}..."
-  mvn package -P cli-dist
+  echo "Did you run 'script/build' first?" 
 fi
 
 ${JAVA} -cp ${JAR} com.caseyscarborough.puzzle.Puzzle $@

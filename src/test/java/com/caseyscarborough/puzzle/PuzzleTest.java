@@ -1,6 +1,5 @@
 package com.caseyscarborough.puzzle;
 
-import com.caseyscarborough.puzzle.*;
 import org.junit.*;
 import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;

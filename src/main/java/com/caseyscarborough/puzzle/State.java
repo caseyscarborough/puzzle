@@ -76,7 +76,7 @@ class State {
    * @return int - The f(n) of the current state.
    */
   public int f() {
-    return g + h;
+    return g() + h();
   }
 
   /**
@@ -137,7 +137,15 @@ class State {
   }
 
   public int g() {
-    return g;
+    return this.g;
+  }
+
+  public int h() {
+    return this.h;
+  }
+
+  public State getPrevious() {
+    return this.previous;
   }
 
 }

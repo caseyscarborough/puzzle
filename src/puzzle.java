@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.FileReader;
 import java.util.*;
 
 /**
@@ -92,6 +96,29 @@ public class puzzle {
   }
 
   /**
+   * This method retrieves a user's input from a file and
+   * returns the input as an integer array.
+   * @param filename - The filename to retrieve from.
+   */
+  public static int[] getFileInput(String filename) {
+    BufferedReader br = null;
+    String input = "";
+
+    try {
+      String currentLine;
+      br = new BufferedReader(new FileReader(filename));
+      while ((currentLine = br.readLine()) != null)
+        input += currentLine.trim() + " ";
+      br.close();
+    } catch (FileNotFoundException e) {
+      System.out.println("File does not exist!");
+      System.exit(0);
+    } catch (IOException e) {}
+
+    return convertToArray(input.trim());
+  }
+
+  /**
    * This method converts a string of user's input into
    * an integer array to be used by the puzzle class.
    * @param s A string of 9 integers separated by spaces.
@@ -162,7 +189,7 @@ public class puzzle {
       State state = queue.poll();
 
       if (state.isSolved()) {
-        state.printAll();
+        System.out.println(state.solutionMessage());
         return;
       }
 
@@ -176,8 +203,14 @@ public class puzzle {
   }
 
   public static void main(String[] args) {
-    int[] puzzleInput = getConsoleInput();
-    puzzle puzzle = new puzzle(puzzleInput);
+    int[] input = null;
+
+    if (args.length == 0)
+      input = getConsoleInput();
+    else
+      input = getFileInput(args[0]);
+
+    puzzle puzzle = new puzzle(input);
 
     if (!puzzle.isSolvable()) {
       System.out.printf("Given puzzle:\n%s\nis NOT solvable!", puzzle.toString());
@@ -283,17 +316,31 @@ class State {
    */
   public String toString() {
     int[] state = this.array;
-    String s = "\n";
+    String s = "\n\n";
     for(int i = 0; i < state.length; i++) {
       if(i % 3 == 0 && i != 0) s += "\n";
-      s += String.format("%d ", state[i]);
+      if (state[i] != 0)
+        s += String.format("%d ", state[i]);
+      else
+        s += "  ";
+
     }
     return s;
   }
 
-  public void printAll() {
-    if (this.previous != null) previous.printAll();
-    System.out.println(this.toString());
+  public String allSteps() {
+    StringBuilder sb = new StringBuilder();
+    if (this.previous != null) sb.append(previous.allSteps());
+    sb.append(this.toString());
+    return sb.toString();
+  }
+
+  public String solutionMessage() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("\nHere are the steps to the goal state:");
+    sb.append(this.allSteps());
+    sb.append("\n\nGiven puzzle is SOLVED!");
+    return sb.toString();
   }
 
 }

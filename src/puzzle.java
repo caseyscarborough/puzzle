@@ -18,6 +18,7 @@ public class puzzle {
   /** The initial capacity of the board. */
   static final int CAPACITY = 9;
 
+  /** The filename for the file to output to, if given. */
   private String outFile;
 
   /** The A * Search priority queue used to solve the puzzle. */
@@ -110,7 +111,7 @@ public class puzzle {
    * returns the input as an integer array.
    * @param filename - The filename to retrieve from.
    */
-  public static int[] getFileInput(String filename) {
+  public static int[] readFromFile(String filename) {
     BufferedReader br = null;
     String input = "";
 
@@ -245,7 +246,7 @@ public class puzzle {
       input = getConsoleInput();
       puzzle = new puzzle(input);
     } else if (args.length >= 1) {
-      input = getFileInput(args[0]);
+      input = readFromFile(args[0]);
       if (args.length == 1) {
         puzzle = new puzzle(input);
       } else {
@@ -256,7 +257,7 @@ public class puzzle {
 
     // Check if the puzzle is solvable.
     if (!puzzle.isSolvable()) {
-      System.out.printf("Given puzzle:\n%s\nis NOT solvable!", puzzle.toString());
+      System.out.printf("Given puzzle:%s\n\nis NOT solvable!", puzzle.state.toString());
       System.exit(0);
     }
 

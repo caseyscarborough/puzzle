@@ -1,6 +1,6 @@
 # Java Sliding Puzzle Solver
 
-This application is a small command line utility used to solve the 8-puzzle game. This implementation uses the [A * Search algorithm](http://en.wikipedia.org/wiki/A*_search_algorithm) to find the goal state. The [Manhattan distance](http://en.wikipedia.org/wiki/Taxicab_geometry) is used to calculate the [heuristic](http://en.wikipedia.org/wiki/Heuristic_function) of the puzzle at each state. An example of an initial state and goal state of the 8-puzzle game are shown below.
+This application is a small command line utility used to solve the 8-puzzle game. This implementation uses the [A * Search algorithm](http://en.wikipedia.org/wiki/A*_search_algorithm) to find the goal state. The [Manhattan distance](http://en.wikipedia.org/wiki/Taxicab_geometry) is used to calculate the [heuristic](http://en.wikipedia.org/wiki/Heuristic_function) of the puzzle at each state. This project was written for the senior level Artificial Intelligence class at my university. An example of an initial state and goal state of the 8-puzzle game are shown below.
 
 __Initial State__:
 

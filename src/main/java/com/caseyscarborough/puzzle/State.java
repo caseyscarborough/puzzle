@@ -158,4 +158,17 @@ class State {
     return this.previous;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    State state = (State) o;
+    return Arrays.equals(array, state.array);
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(array);
+  }
 }
